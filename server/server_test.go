@@ -20,7 +20,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp/config"
+	"github.com/martyn-meister/secrets-store-csi-driver-provider-1password/config"
 	"github.com/google/go-cmp/cmp"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"

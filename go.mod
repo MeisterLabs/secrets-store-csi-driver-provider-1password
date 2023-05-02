@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-module github.com/GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp
+module github.com/martyn-meister/secrets-store-csi-driver-provider-1password
 
 go 1.18
 
 require (
-	cloud.google.com/go/compute/metadata v0.2.3
-	cloud.google.com/go/iam v0.12.0
-	cloud.google.com/go/secretmanager v1.10.0
 	github.com/google/go-cmp v0.5.9
 	github.com/googleapis/gax-go/v2 v2.7.0
 	github.com/prometheus/client_golang v1.14.0
@@ -40,6 +37,7 @@ require (
 
 require (
 	cloud.google.com/go/compute v1.18.0 // indirect
+	cloud.google.com/go/compute/metadata v0.2.3 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/blang/semver/v4 v4.0.0 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect

@@ -1,4 +1,5 @@
 // Copyright 2020 Google LLC
+// Copyright 2023 MeisterLabs Gmbh
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,9 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Binary secrets-store-csi-driver-provider-gcp is a plugin for the
-// secrets-store-csi-driver for fetching secrets from Google Cloud's Secret
-// Manager API.
+// Binary secrets-store-csi-driver-provider-1password is a plugin for the
+// secrets-store-csi-driver for fetching secrets from the 1Password API
 package main
 
 import (
@@ -30,20 +30,15 @@ import (
 	"syscall"
 	"time"
 
-	"cloud.google.com/go/compute/metadata"
-	iam "cloud.google.com/go/iam/credentials/apiv1"
-	secretmanager "cloud.google.com/go/secretmanager/apiv1"
-	"github.com/GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp/auth"
-	"github.com/GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp/infra"
-	"github.com/GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp/server"
+	"github.com/martyn-meister/secrets-store-csi-driver-provider-1password/server"
+	"github.com/martyn-meister/secrets-store-csi-driver-provider-1password/infra"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	otelprom "go.opentelemetry.io/otel/exporters/prometheus"
-	"google.golang.org/api/option"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
+	/*
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
-	"k8s.io/client-go/tools/clientcmd"
+	"k8s.io/client-go/tools/clientcmd"*/
 	logsapi "k8s.io/component-base/logs/api/v1"
 	jlogs "k8s.io/component-base/logs/json"
 	"k8s.io/klog/v2"
@@ -78,9 +73,10 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
-	ua := fmt.Sprintf("secrets-store-csi-driver-provider-gcp/%s", version)
+	ua := fmt.Sprintf("secrets-store-csi-driver-provider-1password/%s", version)
 	klog.InfoS(fmt.Sprintf("starting %s", ua))
 
+	/*
 	// Kubernetes Client
 	var rc *rest.Config
 	var err error
@@ -102,56 +98,6 @@ func main() {
 		klog.Fatal("failed to configure k8s client")
 	}
 
-	// Secret Manager client
-	//
-	// build without auth so that authentication can be re-added on a per-RPC
-	// basis for each mount
-	smOpts := []option.ClientOption{
-		option.WithUserAgent(ua),
-		// tell the secretmanager library to not add transport-level ADC since
-		// we need to override on a per call basis
-		option.WithoutAuthentication(),
-		// grpc oauth TokenSource credentials require transport security, so
-		// this must be set explicitly even though TLS is used
-		option.WithGRPCDialOption(grpc.WithTransportCredentials(credentials.NewTLS(nil))),
-		// establish a pool of underlying connections to the Secret Manager API
-		// to decrease blocking since same client will be used across concurrent
-		// requests. Note that this is implemented in
-		// google.golang.org/api/option and not grpc itself.
-		option.WithGRPCConnectionPool(*smConnectionPoolSize),
-	}
-
-	sc, err := secretmanager.NewClient(ctx, smOpts...)
-	if err != nil {
-		klog.ErrorS(err, "failed to create secretmanager client")
-		klog.Fatal("failed to create secretmanager client")
-	}
-
-	// IAM client
-	//
-	// build without auth so that authentication can be re-added on a per-RPC
-	// basis for each mount
-	iamOpts := []option.ClientOption{
-		option.WithUserAgent(ua),
-		// tell the secretmanager library to not add transport-level ADC since
-		// we need to override on a per call basis
-		option.WithoutAuthentication(),
-		// grpc oauth TokenSource credentials require transport security, so
-		// this must be set explicitly even though TLS is used
-		option.WithGRPCDialOption(grpc.WithTransportCredentials(credentials.NewTLS(nil))),
-		// establish a pool of underlying connections to the Secret Manager API
-		// to decrease blocking since same client will be used across concurrent
-		// requests. Note that this is implemented in
-		// google.golang.org/api/option and not grpc itself.
-		option.WithGRPCConnectionPool(*iamConnectionPoolSize),
-	}
-
-	iamc, err := iam.NewIamCredentialsClient(ctx, iamOpts...)
-	if err != nil {
-		klog.ErrorS(err, "failed to create iam client")
-		klog.Fatal("failed to create iam client")
-	}
-
 	// HTTP client
 	hc := &http.Client{
 		Transport: &http.Transport{
@@ -162,21 +108,12 @@ func main() {
 		},
 		Timeout: 60 * time.Second,
 	}
-
-	c := &auth.Client{
-		KubeClient:     clientset,
-		IAMClient:      iamc,
-		MetadataClient: metadata.NewClient(hc),
-		HTTPClient:     hc,
-	}
-
+*/
 	// setup provider grpc server
 	s := &server.Server{
-		SecretClient: sc,
-		AuthClient:   c,
 	}
 
-	socketPath := filepath.Join(os.Getenv("TARGET_DIR"), "gcp.sock")
+	socketPath := filepath.Join(os.Getenv("TARGET_DIR"), "1password.sock")
 	// Attempt to remove the UDS to handle cases where a previous execution was
 	// killed before fully closing the socket listener and unlinking.
 	_ = os.Remove(socketPath)
