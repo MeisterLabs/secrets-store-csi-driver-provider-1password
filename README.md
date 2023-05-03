@@ -1,4 +1,4 @@
-# ~~Google Secret Manager~~ Provider for Secret Store CSI Driver
+# ~~Google Secret Manager~~1Password Provider for Secret Store CSI Driver
 
 ## Right now I'm hacking away on this to pull out the GSM parts, replacing them with "fake" and then I'll put in the 1password parts afterwards
 

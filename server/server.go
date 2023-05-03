@@ -23,6 +23,7 @@ import (
 	"strings"
 	"sync"
 	"hash/crc32"
+	"encoding/json"
 
 	"github.com/martyn-meister/secrets-store-csi-driver-provider-1password/config"
 
@@ -33,6 +34,7 @@ import (
 	"google.golang.org/protobuf/types/known/anypb"
 	"k8s.io/klog/v2"
 	"sigs.k8s.io/secrets-store-csi-driver/provider/v1alpha1"
+	"github.com/1Password/connect-sdk-go/connect"
 )
 
 //TODO: implement this better, elsewhere.  copied here so we can move forward quickly.
@@ -72,16 +74,16 @@ type AccessSecretVersionResponse struct {
 }
 
 func (x *AccessSecretVersionResponse) GetName() string {
-	return "fake"
+	return x.Name
 }
 
 func (x *AccessSecretVersionResponse) GetPayload() *SecretPayload {
-	s, _ := fakeSecret()
-	return &s
+	return x.Payload
 }
 
 type Server struct {
 	RuntimeVersion string
+	OnePasswordClient connect.Client
 }
 
 var _ v1alpha1.CSIDriverProviderServer = &Server{}
@@ -108,7 +110,7 @@ func (s *Server) Mount(ctx context.Context, req *v1alpha1.MountRequest) (*v1alph
 
 	// Fetch the secrets from the secretmanager API based on the
 	// SecretProviderClass configuration.
-	return handleMountEvent(ctx, 0, nil, cfg)
+	return handleMountEvent(ctx, s.OnePasswordClient, nil, cfg)
 }
 
 // Version implements provider csi-provider method
@@ -120,44 +122,77 @@ func (s *Server) Version(ctx context.Context, req *v1alpha1.VersionRequest) (*v1
 	}, nil
 }
 
-func fakeSecretResponse() (AccessSecretVersionResponse, error) {
-	p, _ := fakeSecret()
-	resp := AccessSecretVersionResponse{Name:"fake",Payload: &p}
-    return resp, nil
-}
-
-func fakeSecret() (SecretPayload, error) {
+func addChecksum(data []byte) SecretPayload {
 	secret := SecretPayload{}
-	secret.Data = []byte("XYZZY")
+	secret.Data = data
 	var crc int64
 	crc = int64(crc32.Checksum(secret.Data, crc32.IEEETable))
     secret.DataCrc32C = &crc
-	return secret, nil
+	return secret
 }
 
-func fakeSecretsList() []SecretPayload {
-	s,_ := fakeSecret()
-	list := []SecretPayload {s}
-	return list
+func data2Response(data []byte) AccessSecretVersionResponse {
+	withChecksum := addChecksum(data)
+	resp := AccessSecretVersionResponse{Name:"fake",Payload: &withChecksum}
+    return resp
+}
+
+func fetchOnePasswordSecret(client connect.Client, secret *config.Secret) (AccessSecretVersionResponse, error){
+	errorPayload := addChecksum(nil)
+	errorResponse := AccessSecretVersionResponse{Name:"error",Payload: &errorPayload}
+    split := strings.Split(secret.ResourceName, "/")
+	if len(split) >= 4 {
+		item, err := client.GetItem(split[3], split[1])
+		if err != nil {
+			return errorResponse, err
+		}
+		if len(split) > 4 {
+			for _,field := range(item.Fields) {
+				if field.Label == split[4] {
+					return data2Response([]byte(field.Value)), nil
+				}
+			}
+			return errorResponse, fmt.Errorf("fieldname %s in item not found", split[5])
+		}
+		itemJSON, err := json.Marshal(item.Fields)
+		if err != nil {
+			return errorResponse, err
+		}
+		return data2Response(itemJSON), nil
+	} 
+	return errorResponse, fmt.Errorf("resourceName %s in SecretProviderClass secrets list must be in format vault/uuid/secret/secretname[/fieldname]", secret.ResourceName)
+
+}
+
+func getOnePasswordSecretsList(client connect.Client) {
+	vaults, err := client.GetVaults()
+	if err != nil {
+		klog.ErrorS(err, "unable to list 1p vaults we should have access to")
+		klog.Fatalln("unable to start")
+	}
+	for _, v := range(vaults) {
+		klog.InfoS(v.Name)
+	}
 }
 
 // handleMountEvent fetches the secrets from the secretmanager API and
 // include them in the MountResponse based on the SecretProviderClass
 // configuration.
 //TODO: removed was secretclient, remove this from the signature later.
-func handleMountEvent(ctx context.Context, removed int, creds credentials.PerRPCCredentials, cfg *config.MountConfig) (*v1alpha1.MountResponse, error) {
+func handleMountEvent(ctx context.Context, client connect.Client, creds credentials.PerRPCCredentials, cfg *config.MountConfig) (*v1alpha1.MountResponse, error) {
 	results := make([]*AccessSecretVersionResponse, len(cfg.Secrets))
 	errs := make([]error, len(cfg.Secrets))
+	getOnePasswordSecretsList(client)
 
 	// In parallel fetch all secrets needed for the mount
 	wg := sync.WaitGroup{}
-	for i, _ := range cfg.Secrets {
+	for i, secret := range cfg.Secrets {
 		wg.Add(1)
 
-		i := i
+		i, secret := i, secret
 		go func() {
 			defer wg.Done()
-			resp, err := fakeSecretResponse()
+			resp, err := fetchOnePasswordSecret(client, secret)
 			klog.InfoS("\"fetched\" a secret", "response", resp)
 			results[i] = &resp
 			errs[i] = err

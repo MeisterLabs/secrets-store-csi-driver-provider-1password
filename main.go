@@ -43,6 +43,7 @@ import (
 	jlogs "k8s.io/component-base/logs/json"
 	"k8s.io/klog/v2"
 	"sigs.k8s.io/secrets-store-csi-driver/provider/v1alpha1"
+	"github.com/1Password/connect-sdk-go/connect"
 )
 
 var (
@@ -76,41 +77,22 @@ func main() {
 	ua := fmt.Sprintf("secrets-store-csi-driver-provider-1password/%s", version)
 	klog.InfoS(fmt.Sprintf("starting %s", ua))
 
-	/*
-	// Kubernetes Client
-	var rc *rest.Config
-	var err error
-	if *kubeconfig != "" {
-		klog.V(5).InfoS("using kubeconfig", "path", *kubeconfig)
-		rc, err = clientcmd.BuildConfigFromFlags("", *kubeconfig)
-	} else {
-		klog.V(5).InfoS("using in-cluster kubeconfig")
-		rc, err = rest.InClusterConfig()
-	}
+	// setup onepassword connect client
+	op := connect.NewClient(os.Getenv("CONNECT_SERVER"), os.Getenv("CONNECT_TOKEN"))
+	klog.InfoS("Connected to OnePassword Connect")
+
+	vaults, err := op.GetVaults()
 	if err != nil {
-		klog.ErrorS(err, "failed to read kubeconfig")
-		klog.Fatal("failed to read kubeconfig")
+		klog.ErrorS(err, "unable to list 1p vaults we should have access to")
+		klog.Fatalln("unable to start")
+	}
+	for _, v := range(vaults) {
+		klog.InfoS("Found vault %s",v.Name)
 	}
 
-	clientset, err := kubernetes.NewForConfig(rc)
-	if err != nil {
-		klog.ErrorS(err, "failed to configure k8s client")
-		klog.Fatal("failed to configure k8s client")
-	}
-
-	// HTTP client
-	hc := &http.Client{
-		Transport: &http.Transport{
-			Dial: (&net.Dialer{
-				Timeout:   2 * time.Second,
-				KeepAlive: 30 * time.Second,
-			}).Dial,
-		},
-		Timeout: 60 * time.Second,
-	}
-*/
 	// setup provider grpc server
 	s := &server.Server{
+		OnePasswordClient: op,
 	}
 
 	socketPath := filepath.Join(os.Getenv("TARGET_DIR"), "1password.sock")

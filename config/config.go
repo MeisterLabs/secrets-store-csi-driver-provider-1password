@@ -37,8 +37,8 @@ const (
 // Secret holds the parameters of the SecretProviderClass CRD. Links the GCP
 // secret resource name to a path in the filesystem.
 type Secret struct {
-	// ResourceName refers to a SecretVersion in the format
-	// projects/*/secrets/*/versions/*.
+	// ResourceName refers to a Secret in OnePassword in the format
+	// vaults/*/secrets/*[/optionalField].
 	ResourceName string `json:"resourceName" yaml:"resourceName"`
 
 	// FileName is where the contents of the secret are to be written.
