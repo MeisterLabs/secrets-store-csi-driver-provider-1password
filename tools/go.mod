@@ -1,4 +1,4 @@
-module github.com/GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp/tools
+module github.com/martyn-meister/secrets-store-csi-driver-provider-1password/tools
 
 go 1.18
 

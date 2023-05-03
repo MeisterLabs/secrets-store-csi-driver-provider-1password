@@ -8,16 +8,16 @@ ENV GO111MODULE=on \
     GOOS=linux \
     GOARCH=$TARGETARCH
 
-WORKDIR /tmp/secrets-store-csi-driver-provider-gcp
+WORKDIR /tmp/secrets-store-csi-driver-provider-1password
 COPY . ./
 RUN go get -t ./...
 RUN make licensessave
 RUN go install \
     -trimpath \
     -ldflags "-s -w -extldflags '-static' -X 'main.version=${VERSION}'" \
-    github.com/GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp
+    github.com/martyn-meister/secrets-store-csi-driver-provider-1password
 
 FROM gcr.io/distroless/static-debian10
-COPY --from=build-env /tmp/secrets-store-csi-driver-provider-gcp/licenses /licenses
-COPY --from=build-env /go/bin/secrets-store-csi-driver-provider-gcp /bin/
-ENTRYPOINT ["/bin/secrets-store-csi-driver-provider-gcp"]
+COPY --from=build-env /tmp/secrets-store-csi-driver-provider-1password/licenses /licenses
+COPY --from=build-env /go/bin/secrets-store-csi-driver-provider-1password /bin/
+ENTRYPOINT ["/bin/secrets-store-csi-driver-provider-1password"]

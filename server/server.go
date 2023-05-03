@@ -151,19 +151,21 @@ func handleMountEvent(ctx context.Context, removed int, creds credentials.PerRPC
 
 	// In parallel fetch all secrets needed for the mount
 	wg := sync.WaitGroup{}
-	for i, _ := range fakeSecretsList() {
+	for i, _ := range cfg.Secrets {
 		wg.Add(1)
 
 		i := i
 		go func() {
 			defer wg.Done()
 			resp, err := fakeSecretResponse()
+			klog.InfoS("\"fetched\" a secret", "response", resp)
 			results[i] = &resp
 			errs[i] = err
 		}()
 	}
 	wg.Wait()
 
+	klog.InfoS("\"fetched\" all secrets", "resource_name", results, "pod", klog.ObjectRef{Namespace: cfg.PodInfo.Namespace, Name: cfg.PodInfo.Name})
 	// If any access failed, return a grpc status error that includes each
 	// individual status error in the Details field.
 	//
