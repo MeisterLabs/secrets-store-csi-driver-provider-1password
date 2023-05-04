@@ -12,7 +12,7 @@ metadata:
 spec:
   serviceAccountName: mypodserviceaccount
   containers:
-  - image: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+  - image: alpine:latest
     imagePullPolicy: IfNotPresent
     name: mypod
     resources:
