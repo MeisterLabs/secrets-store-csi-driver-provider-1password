@@ -1,8 +1,28 @@
-# ~~Google Secret Manager~~1Password Provider for Secret Store CSI Driver
+# 1Password Provider for Secret Store CSI Driver
 
-## Right now I'm hacking away on this to pull out the GSM parts, replacing them with "fake" and then I'll put in the 1password parts afterwards
+## Note: this is hacky code!
 
-Rest of this readme untouched
+I did this work during something called innovation week, a meisterlabs concept much like a hackday, so it needs improvement.
+
+This provider is very much the GCP provider hacked apart and the GCP secret manager parts pulled out and replaced with 1password connect features.
+
+## Flow diagram
+```mermaid
+flowchart TD
+    A[Pod needing secret] --> B[SecretProviderClass]
+    C[csi-secrets-store] -->M
+    B --> M[Pod gets secrets mounted]
+    C --> D[Plugin: csi-secrets-store-1password-provider]
+    Y[This repo] --> D
+    style Y stroke:#f66,stroke-width:2px,stroke-dasharray: 5 5
+    D --> C
+    D -- auth token--> E[1Password Connect]
+    E --> D
+    E -- auth token--> F[1Password API]
+    F --> E
+```
+
+## Rest of this readme untouched yet
 
 [![e2e](https://github.com/GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp/actions/workflows/e2e.yml/badge.svg)](https://github.com/GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp/actions/workflows/e2e.yml)
 
