@@ -34,8 +34,9 @@ const (
 	attributeServiceAccountName = "csi.storage.k8s.io/serviceAccount.name"
 )
 
-// Secret holds the parameters of the SecretProviderClass CRD. Links the GCP
-// secret resource name to a path in the filesystem.
+// Secret holds the parameters of the SecretProviderClass CRD. Links the 1password
+// secret resource name to a path in the filesystem.  Completely unchanged from GCP 
+// provider, could possibly be changed later
 type Secret struct {
 	// ResourceName refers to a Secret in OnePassword in the format
 	// vaults/*/secrets/*[/optionalField].
@@ -135,13 +136,13 @@ func Parse(in *MountParams) (*MountConfig, error) {
 	switch attrib["auth"] {
 	case "provider-adc":
 		if out.AuthNodePublishSecret {
-			klog.InfoS("attempting to set both nodePublishSecretRef and provider-adc auth. For details consult https://github.com/GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp/blob/main/docs/authentication.md", "pod", podInfo)
+			klog.InfoS("attempting to set both nodePublishSecretRef and provider-adc auth. For details consult https://github.com/GoogleCloudPlatform/secrets-store-csi-driver-provider-1password/blob/main/docs/authentication.md", "pod", podInfo)
 			return nil, fmt.Errorf("attempting to set both nodePublishSecretRef and provider-adc auth")
 		}
 		out.AuthProviderADC = true
 	case "pod-adc":
 		if out.AuthNodePublishSecret {
-			klog.InfoS("attempting to set both nodePublishSecretRef and pod-adc auth. For details consult https://github.com/GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp/blob/main/docs/authentication.md", "pod", podInfo)
+			klog.InfoS("attempting to set both nodePublishSecretRef and pod-adc auth. For details consult https://github.com/GoogleCloudPlatform/secrets-store-csi-driver-provider-1password/blob/main/docs/authentication.md", "pod", podInfo)
 			return nil, fmt.Errorf("attempting to set both nodePublishSecretRef and pod-adc auth")
 		}
 		out.AuthPodADC = true

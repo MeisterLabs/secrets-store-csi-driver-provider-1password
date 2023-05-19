@@ -193,14 +193,12 @@ func handleMountEvent(ctx context.Context, client connect.Client, creds credenti
 		go func() {
 			defer wg.Done()
 			resp, err := fetchOnePasswordSecret(client, secret)
-			klog.InfoS("\"fetched\" a secret", "response", resp)
 			results[i] = &resp
 			errs[i] = err
 		}()
 	}
 	wg.Wait()
-
-	klog.InfoS("\"fetched\" all secrets", "resource_name", results, "pod", klog.ObjectRef{Namespace: cfg.PodInfo.Namespace, Name: cfg.PodInfo.Name})
+	
 	// If any access failed, return a grpc status error that includes each
 	// individual status error in the Details field.
 	//

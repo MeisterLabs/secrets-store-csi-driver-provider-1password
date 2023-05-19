@@ -4,7 +4,7 @@ ENV CGO_ENABLED=0 \
     GOARCH=amd64
 
 # e2e test
-WORKDIR /tmp/secrets-store-csi-driver-provider-gcp/test/e2e
+WORKDIR /tmp/secrets-store-csi-driver-provider-1password/test/e2e
 COPY . ./
 RUN go get -t ./...
 RUN go test -c .
@@ -14,8 +14,8 @@ ARG INSTALL_COMPONENTS=gke-gcloud-auth-plugin
 FROM gcr.io/google.com/cloudsdktool/cloud-sdk:debian_component_based
 ENV USE_GKE_GCLOUD_AUTH_PLUGIN=True
 
-COPY --from=build-env /tmp/secrets-store-csi-driver-provider-gcp/test/e2e/e2e.test /bin/
-COPY --from=build-env /tmp/secrets-store-csi-driver-provider-gcp/test/e2e/templates /test/templates
+COPY --from=build-env /tmp/secrets-store-csi-driver-provider-1password/test/e2e/e2e.test /bin/
+COPY --from=build-env /tmp/secrets-store-csi-driver-provider-1password/test/e2e/templates /test/templates
 COPY enable-rotation.sh /bin/
 
 WORKDIR /test

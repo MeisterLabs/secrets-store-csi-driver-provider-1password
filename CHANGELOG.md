@@ -1,9 +1,24 @@
-# secrets-store-csi-driver-provider-gcp Changelog
+# secrets-store-csi-driver-provider-1password Changelog
 
-All notable changes to secrets-store-csi-driver-provider-gcp will be documented in this file. This file is maintained by humans and is therefore subject to error.
+All notable changes to secrets-store-csi-driver-provider-1password will be documented in this file. This file is maintained by humans and is therefore subject to error.
+
+## Forked from secrets-store-csi-driver-provider-gcp on 2023-05-02
+
+Please note that from this point, no backports are intended to be pulled from the GCP provider.  Should we be made of any security or other fixes from the GCP driver, we will of course pull them across.
+
+Restarting versioning at v0.1.0
 
 ## unreleased
 
+## v0.1.0
+
+* Initial release of working 1password driver
+* Replacing all ocurrences of GCP with 1password
+
+---
+
+## Changelog below this point from secrets-store-csi-driver-provider-gcp 
+---
 ## v1.2.0
 
 Images:
