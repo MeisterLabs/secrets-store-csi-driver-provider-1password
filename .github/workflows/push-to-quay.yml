@@ -1,0 +1,46 @@
+name: push-to-quay
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    name: unit
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
+        with:
+          go-version: "1.20"
+      - name: Get dependencies
+        run: go get -t ./...
+      - name: Lint
+        run: make fmtcheck staticcheck spellcheck licensescheck
+        if: ${{ matrix.os != 'windows-latest' }}
+      - name: gosec
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: make gosec
+      - name: Test
+        run: make test-acc
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: quay.io
+          username: meisterlabs+secrets1p
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            quay.io/meisterlabs/secrets-store-csi-driver-provider-1password:latest
+            quay.io/meisterlabs/secrets-store-csi-driver-provider-1password:0.1
