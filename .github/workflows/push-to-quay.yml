@@ -1,11 +1,14 @@
 name: push-to-quay
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["test"]
+    branches: [main]
+    types: 
+      - completed
 
 jobs:
-  test:
+  buildnpush:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     strategy:
       fail-fast: false
       matrix:
@@ -40,15 +43,6 @@ jobs:
         with:
           context: .
           platforms: linux/amd64
-          push: true
-          tags: |
-            quay.io/meisterlabs/secrets-store-csi-driver-provider-1password:latest
-            quay.io/meisterlabs/secrets-store-csi-driver-provider-1password:0.1
-      - name: Build and push
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          platforms: linux/arm64
           push: true
           tags: |
             quay.io/meisterlabs/secrets-store-csi-driver-provider-1password:latest
