@@ -43,11 +43,11 @@ import (
 )
 
 var (
-	logFormatJSON         = flag.Bool("log-format-json", true, "set log formatter to json")
-	metricsAddr           = flag.String("metrics_addr", ":8095", "configure http listener for reporting metrics")
-	enableProfile         = flag.Bool("enable-pprof", false, "enable pprof profiling")
-	debugAddr             = flag.String("debug_addr", "localhost:6060", "port for pprof profiling")
-	_                     = flag.Bool("write_secrets", false, "[unused]")
+	logFormatJSON = flag.Bool("log-format-json", true, "set log formatter to json")
+	metricsAddr   = flag.String("metrics_addr", ":8095", "configure http listener for reporting metrics")
+	enableProfile = flag.Bool("enable-pprof", false, "enable pprof profiling")
+	debugAddr     = flag.String("debug_addr", "localhost:6060", "port for pprof profiling")
+	_             = flag.Bool("write_secrets", false, "[unused]")
 
 	version = "dev"
 )
