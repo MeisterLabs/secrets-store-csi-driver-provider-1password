@@ -30,31 +30,24 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/martyn-meister/secrets-store-csi-driver-provider-1password/server"
+	"github.com/1Password/connect-sdk-go/connect"
 	"github.com/martyn-meister/secrets-store-csi-driver-provider-1password/infra"
+	"github.com/martyn-meister/secrets-store-csi-driver-provider-1password/server"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	otelprom "go.opentelemetry.io/otel/exporters/prometheus"
 	"google.golang.org/grpc"
-	/*
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
-	"k8s.io/client-go/tools/clientcmd"*/
 	logsapi "k8s.io/component-base/logs/api/v1"
 	jlogs "k8s.io/component-base/logs/json"
 	"k8s.io/klog/v2"
 	"sigs.k8s.io/secrets-store-csi-driver/provider/v1alpha1"
-	"github.com/1Password/connect-sdk-go/connect"
 )
 
 var (
-	kubeconfig            = flag.String("kubeconfig", "", "absolute path to kubeconfig file")
 	logFormatJSON         = flag.Bool("log-format-json", true, "set log formatter to json")
 	metricsAddr           = flag.String("metrics_addr", ":8095", "configure http listener for reporting metrics")
 	enableProfile         = flag.Bool("enable-pprof", false, "enable pprof profiling")
 	debugAddr             = flag.String("debug_addr", "localhost:6060", "port for pprof profiling")
 	_                     = flag.Bool("write_secrets", false, "[unused]")
-	smConnectionPoolSize  = flag.Int("sm_connection_pool_size", 5, "size of the connection pool for the secret manager API client")
-	iamConnectionPoolSize = flag.Int("iam_connection_pool_size", 5, "size of the connection pool for the IAM API client")
 
 	version = "dev"
 )
@@ -86,8 +79,8 @@ func main() {
 		klog.ErrorS(err, "unable to list 1p vaults we should have access to")
 		klog.Fatalln("unable to start")
 	}
-	for _, v := range(vaults) {
-		klog.InfoS("Found vault %s",v.Name)
+	for _, v := range vaults {
+		klog.InfoS("Found vault %s", v.Name)
 	}
 
 	// setup provider grpc server

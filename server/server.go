@@ -17,16 +17,17 @@ package server
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"hash/crc32"
 	"os"
 	"strconv"
 	"strings"
 	"sync"
-	"hash/crc32"
-	"encoding/json"
 
 	"github.com/martyn-meister/secrets-store-csi-driver-provider-1password/config"
 
+	"github.com/1Password/connect-sdk-go/connect"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
@@ -34,10 +35,10 @@ import (
 	"google.golang.org/protobuf/types/known/anypb"
 	"k8s.io/klog/v2"
 	"sigs.k8s.io/secrets-store-csi-driver/provider/v1alpha1"
-	"github.com/1Password/connect-sdk-go/connect"
 )
 
-//TODO: implement this better, elsewhere.  copied here so we can move forward quickly.
+// TODO: implement this better, elsewhere.  copied here so we can move forward quickly.
+
 type SecretPayload struct {
 
 	// The secret data. Must be no larger than 64KiB.
@@ -62,7 +63,8 @@ type SecretPayload struct {
 	// contains filtered or unexported fields
 }
 
-//TODO: implement this better, elsewhere.  copied here so we can move forward quickly.
+// TODO: implement this better, elsewhere.  copied here so we can move forward quickly.
+
 type AccessSecretVersionResponse struct {
 
 	// The resource name of the [SecretVersion][google.cloud.secretmanager.v1.SecretVersion] in the format
@@ -82,7 +84,7 @@ func (x *AccessSecretVersionResponse) GetPayload() *SecretPayload {
 }
 
 type Server struct {
-	RuntimeVersion string
+	RuntimeVersion    string
 	OnePasswordClient connect.Client
 }
 
@@ -125,29 +127,28 @@ func (s *Server) Version(ctx context.Context, req *v1alpha1.VersionRequest) (*v1
 func addChecksum(data []byte) SecretPayload {
 	secret := SecretPayload{}
 	secret.Data = data
-	var crc int64
-	crc = int64(crc32.Checksum(secret.Data, crc32.IEEETable))
-    secret.DataCrc32C = &crc
+	var crc = int64(crc32.Checksum(secret.Data, crc32.IEEETable))
+	secret.DataCrc32C = &crc
 	return secret
 }
 
 func data2Response(data []byte) AccessSecretVersionResponse {
 	withChecksum := addChecksum(data)
-	resp := AccessSecretVersionResponse{Name:"fake",Payload: &withChecksum}
-    return resp
+	resp := AccessSecretVersionResponse{Name: "fake", Payload: &withChecksum}
+	return resp
 }
 
-func fetchOnePasswordSecret(client connect.Client, secret *config.Secret) (AccessSecretVersionResponse, error){
+func fetchOnePasswordSecret(client connect.Client, secret *config.Secret) (AccessSecretVersionResponse, error) {
 	errorPayload := addChecksum(nil)
-	errorResponse := AccessSecretVersionResponse{Name:"error",Payload: &errorPayload}
-    split := strings.Split(secret.ResourceName, "/")
+	errorResponse := AccessSecretVersionResponse{Name: "error", Payload: &errorPayload}
+	split := strings.Split(secret.ResourceName, "/")
 	if len(split) >= 4 {
 		item, err := client.GetItem(split[3], split[1])
 		if err != nil {
 			return errorResponse, err
 		}
 		if len(split) > 4 {
-			for _,field := range(item.Fields) {
+			for _, field := range item.Fields {
 				if field.Label == split[4] {
 					return data2Response([]byte(field.Value)), nil
 				}
@@ -159,7 +160,7 @@ func fetchOnePasswordSecret(client connect.Client, secret *config.Secret) (Acces
 			return errorResponse, err
 		}
 		return data2Response(itemJSON), nil
-	} 
+	}
 	return errorResponse, fmt.Errorf("resourceName %s in SecretProviderClass secrets list must be in format vault/uuid/secret/secretname[/fieldname]", secret.ResourceName)
 
 }
@@ -170,7 +171,7 @@ func getOnePasswordSecretsList(client connect.Client) {
 		klog.ErrorS(err, "unable to list 1p vaults we should have access to")
 		klog.Fatalln("unable to start")
 	}
-	for _, v := range(vaults) {
+	for _, v := range vaults {
 		klog.InfoS(v.Name)
 	}
 }
@@ -178,7 +179,7 @@ func getOnePasswordSecretsList(client connect.Client) {
 // handleMountEvent fetches the secrets from the secretmanager API and
 // include them in the MountResponse based on the SecretProviderClass
 // configuration.
-//TODO: removed was secretclient, remove this from the signature later.
+// TODO: removed was secretclient, remove this from the signature later.
 func handleMountEvent(ctx context.Context, client connect.Client, creds credentials.PerRPCCredentials, cfg *config.MountConfig) (*v1alpha1.MountResponse, error) {
 	results := make([]*AccessSecretVersionResponse, len(cfg.Secrets))
 	errs := make([]error, len(cfg.Secrets))
@@ -198,7 +199,7 @@ func handleMountEvent(ctx context.Context, client connect.Client, creds credenti
 		}()
 	}
 	wg.Wait()
-	
+
 	// If any access failed, return a grpc status error that includes each
 	// individual status error in the Details field.
 	//

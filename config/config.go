@@ -35,7 +35,7 @@ const (
 )
 
 // Secret holds the parameters of the SecretProviderClass CRD. Links the 1password
-// secret resource name to a path in the filesystem.  Completely unchanged from GCP 
+// secret resource name to a path in the filesystem.  Completely unchanged from GCP
 // provider, could possibly be changed later
 type Secret struct {
 	// ResourceName refers to a Secret in OnePassword in the format
