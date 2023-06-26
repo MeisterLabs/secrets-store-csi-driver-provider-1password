@@ -17,7 +17,7 @@ module github.com/martyn-meister/secrets-store-csi-driver-provider-1password
 go 1.18
 
 require (
-	github.com/1Password/connect-sdk-go v1.5.0
+	github.com/1Password/connect-sdk-go v1.5.1
 	github.com/google/go-cmp v0.5.9
 	github.com/prometheus/client_golang v1.14.0
 	go.opentelemetry.io/otel/exporters/prometheus v0.37.0
