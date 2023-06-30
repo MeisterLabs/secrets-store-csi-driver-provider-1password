@@ -26,7 +26,7 @@ require (
 	google.golang.org/protobuf v1.30.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/apimachinery v0.27.3
-	k8s.io/component-base v0.26.1
+	k8s.io/component-base v0.27.3
 	k8s.io/klog/v2 v2.100.1
 	sigs.k8s.io/secrets-store-csi-driver v1.3.4
 )
