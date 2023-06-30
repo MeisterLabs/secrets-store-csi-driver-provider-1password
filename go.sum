@@ -213,5 +213,5 @@ k8s.io/utils v0.0.0-20230220204549-a5ecb0141aa5 h1:kmDqav+P+/5e1i9tFfHq1qcF3sOrD
 k8s.io/utils v0.0.0-20230220204549-a5ecb0141aa5/go.mod h1:OLgZIPagt7ERELqWJFomSt595RzquPNLL48iOWgYOg0=
 rsc.io/pdf v0.1.1/go.mod h1:n8OzWcQ6Sp37PL01nO98y4iUCRdTGarVfzxY20ICaU4=
 sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd h1:EDPBXCAspyGV4jQlpZSudPeMmr1bNJefnuqLsRAsHZo=
-sigs.k8s.io/secrets-store-csi-driver v1.3.1 h1:kn+APtDM90E9nJGERxCBEsbXqW+wYKE7LJiCy4cOOwI=
-sigs.k8s.io/secrets-store-csi-driver v1.3.1/go.mod h1:gEEAWU949RQKZAW0RRTifnk/H4yqtyvVkgf2hA1uz2E=
+sigs.k8s.io/secrets-store-csi-driver v1.3.4 h1:rCMOb2I4lJaN6sw0CjT6YHA8ts2yscWAOBGu0EaCIWk=
+sigs.k8s.io/secrets-store-csi-driver v1.3.4/go.mod h1:jh6wML45aTbxT2YZtU4khzSm8JYxwVrQbhsum+WR6j8=
