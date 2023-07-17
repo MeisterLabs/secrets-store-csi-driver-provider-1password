@@ -1,5 +1,5 @@
-github.com/1Password/connect-sdk-go v1.5.1 h1:wb9niRg4BOa+lZJjj1TOX6093VJxuOYtzqUnRpwKnvs=
-github.com/1Password/connect-sdk-go v1.5.1/go.mod h1:lKGz6DFO6qMchEQ+lDx6f9MzORTxC1HkhUdHnJ24fKs=
+github.com/1Password/connect-sdk-go v1.5.2 h1:JTE0pVRrbtt38VI7R9VFTTY7qy/elXN15fnFk/Eyo/w=
+github.com/1Password/connect-sdk-go v1.5.2/go.mod h1:5rSymY4oIYtS4G3t0oMkGAXBeoYiukV3vkqlnEjIDJs=
 github.com/HdrHistogram/hdrhistogram-go v1.1.2 h1:5IcZpTvzydCQeHzK4Ef/D5rrSqwxob0t8PQPMybUNFM=
 github.com/benbjohnson/clock v1.1.0 h1:Q92kusRqC1XV2MjkWETPvjJVqKetz1OzxZB7mHJLju8=
 github.com/benbjohnson/clock v1.1.0/go.mod h1:J11/hYXuz8f4ySSvYwY0FKfm+ezbsZBKZxNJlLklBHA=
