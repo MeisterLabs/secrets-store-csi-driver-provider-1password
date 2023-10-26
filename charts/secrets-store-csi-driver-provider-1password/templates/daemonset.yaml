@@ -32,7 +32,7 @@ spec:
               value: "/etc/kubernetes/secrets-store-csi-providers"
             - name: CONNECT_TOKEN
               valueFrom: 
-                configMapKeyRef:
+                secretKeyRef:
                   name: {{ .Values.secret.secretName | default "1password-connect-token" }}
                   key: {{ .Values.secret.secretKey | default "token" }}
             - name: CONNECT_SERVER

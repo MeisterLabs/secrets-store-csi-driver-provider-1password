@@ -5,7 +5,7 @@ serviceAccount:
   name: secrets-store-csi-driver-provider-1password
 
 image:
-  repository: us-docker.pkg.dev/secretmanager-csi/secrets-store-csi-driver-provider-1password/plugin
+  repository: quay.io/meisterlabs/secrets-store-csi-driver-provider-1password
   pullPolicy: IfNotPresent
   tag: latest
 
