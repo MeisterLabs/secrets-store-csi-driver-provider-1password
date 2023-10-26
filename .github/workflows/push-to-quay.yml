@@ -37,10 +37,10 @@ jobs:
           username: meisterlabs+secrets1p
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             quay.io/meisterlabs/secrets-store-csi-driver-provider-1password:latest
