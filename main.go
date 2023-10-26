@@ -60,7 +60,7 @@ func main() {
 
 	if *logFormatJSON {
 		jsonFactory := jlogs.Factory{}
-		logger, _ := jsonFactory.Create(logsapi.LoggingConfiguration{Format: "json"}, logsapi.LoggingOptions{})
+		logger, _ := jsonFactory.Create(logsapi.LoggingConfiguration{Format: "json"}, logsapi.LoggingOptions{ErrorStream: os.Stderr, InfoStream: os.Stdout})
 		klog.SetLogger(logger)
 	}
 
