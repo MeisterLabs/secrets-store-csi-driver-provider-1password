@@ -10,8 +10,14 @@ image:
   tag: latest
 
 connect:
-  token: CREATEME123
   server: http://myconnectserver.mynamespace.svc.cluster.local:8080/
+
+# if tokenLiteral is not empty, creates a secret from the literal below
+# if tokenLiteral is empty, assumes that you will create the secret yourself
+secret:
+  tokenLiteral: ""
+  secretName: 1password-connect-token
+  secretKey: token
 
 app: csi-secrets-store-provider-1password
 

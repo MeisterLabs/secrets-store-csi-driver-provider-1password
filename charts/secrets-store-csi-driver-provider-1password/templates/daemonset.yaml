@@ -31,7 +31,10 @@ spec:
             - name: TARGET_DIR
               value: "/etc/kubernetes/secrets-store-csi-providers"
             - name: CONNECT_TOKEN
-              value: {{ .Values.connect.token }} # We need to move this to a secret (lol) soon
+              valueFrom: 
+                configMapKeyRef:
+                  name: {{ .Values.secret.secretName | default "1password-connect-token" }}
+                  key: {{ .Values.secret.secretKey | default "token" }}
             - name: CONNECT_SERVER
               value: {{ .Values.connect.server }} 
           volumeMounts:
