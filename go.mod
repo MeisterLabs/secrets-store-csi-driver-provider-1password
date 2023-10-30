@@ -18,7 +18,7 @@ go 1.18
 
 require (
 	github.com/1Password/connect-sdk-go v1.5.1
-	github.com/google/go-cmp v0.5.9
+	github.com/google/go-cmp v0.6.0
 	github.com/prometheus/client_golang v1.16.0
 	go.opentelemetry.io/otel/exporters/prometheus v0.39.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230525234030-28d5490b6b19
