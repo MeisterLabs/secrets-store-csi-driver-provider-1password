@@ -153,7 +153,7 @@ func fetchOnePasswordSecret(client connect.Client, secret *config.Secret) (Acces
 					return data2Response([]byte(field.Value)), nil
 				}
 			}
-			return errorResponse, fmt.Errorf("fieldname %s in item not found", split[5])
+			return errorResponse, fmt.Errorf("fieldname %s in item not found", split[4])
 		}
 		itemJSON, err := json.Marshal(item.Fields)
 		if err != nil {
