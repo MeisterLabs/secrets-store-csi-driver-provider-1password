@@ -153,7 +153,7 @@ func fetchOnePasswordSecret(client connect.Client, secret *config.Secret) (Acces
 			if err != nil {
 				for i, file := range files {
 					if file.Name == split[4] {
-						content, err := client.GetFileContent(files[i])
+						content, err := client.GetFileContent(&files[i])
 						if err != nil {
 							return data2Response([]byte(content)), nil
 						}
