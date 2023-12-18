@@ -17,17 +17,17 @@ module github.com/martyn-meister/secrets-store-csi-driver-provider-1password
 go 1.18
 
 require (
+	github.com/1Password/connect-sdk-go v1.5.3
 	github.com/google/go-cmp v0.6.0
 	github.com/prometheus/client_golang v1.17.0
 	go.opentelemetry.io/otel/exporters/prometheus v0.44.0
-	github.com/1Password/connect-sdk-go v1.5.3
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230822172742-b8732ec3820d
 	google.golang.org/grpc v1.59.0
 	google.golang.org/protobuf v1.31.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/apimachinery v0.28.3
 	k8s.io/component-base v0.28.3
-	k8s.io/klog/v2 v2.100.1
+	k8s.io/klog/v2 v2.110.1
 	sigs.k8s.io/secrets-store-csi-driver v1.3.4
 )
 
