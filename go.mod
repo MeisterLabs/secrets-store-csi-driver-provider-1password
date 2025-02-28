@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-module github.com/martyn-meister/secrets-store-csi-driver-provider-1password
+module github.com/meisterlabs/secrets-store-csi-driver-provider-1password
 
 go 1.24
 

@@ -31,8 +31,8 @@ import (
 	"time"
 
 	"github.com/1Password/connect-sdk-go/connect"
-	"github.com/martyn-meister/secrets-store-csi-driver-provider-1password/infra"
-	"github.com/martyn-meister/secrets-store-csi-driver-provider-1password/server"
+	"github.com/meisterlabs/secrets-store-csi-driver-provider-1password/infra"
+	"github.com/meisterlabs/secrets-store-csi-driver-provider-1password/server"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	otelprom "go.opentelemetry.io/otel/exporters/prometheus"
 	"google.golang.org/grpc"

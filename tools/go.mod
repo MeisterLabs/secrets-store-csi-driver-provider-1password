@@ -1,4 +1,4 @@
-module github.com/martyn-meister/secrets-store-csi-driver-provider-1password/tools
+module github.com/meisterlabs/secrets-store-csi-driver-provider-1password/tools
 
 go 1.24
 

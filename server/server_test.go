@@ -24,7 +24,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/martyn-meister/secrets-store-csi-driver-provider-1password/config"
+	"github.com/meisterlabs/secrets-store-csi-driver-provider-1password/config"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

@@ -15,7 +15,7 @@ RUN make licensessave
 RUN go install \
     -trimpath \
     -ldflags "-s -w -extldflags '-static' -X 'main.version=${VERSION}'" \
-    github.com/martyn-meister/secrets-store-csi-driver-provider-1password
+    github.com/meisterlabs/secrets-store-csi-driver-provider-1password
 
 FROM gcr.io/distroless/static-debian10
 COPY --from=build-env /tmp/secrets-store-csi-driver-provider-1password/licenses /licenses

@@ -25,7 +25,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/martyn-meister/secrets-store-csi-driver-provider-1password/config"
+	"github.com/meisterlabs/secrets-store-csi-driver-provider-1password/config"
 
 	"github.com/1Password/connect-sdk-go/connect"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
