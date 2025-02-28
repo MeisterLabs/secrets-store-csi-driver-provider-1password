@@ -1,6 +1,8 @@
 module github.com/martyn-meister/secrets-store-csi-driver-provider-1password/tools
 
-go 1.18
+go 1.24
+
+toolchain go1.24.0
 
 require (
 	github.com/client9/misspell v0.3.4
