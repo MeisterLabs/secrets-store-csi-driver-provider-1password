@@ -14,7 +14,7 @@
 
 module github.com/martyn-meister/secrets-store-csi-driver-provider-1password
 
-go 1.18
+go 1.24
 
 require (
 	github.com/1Password/connect-sdk-go v1.5.3
