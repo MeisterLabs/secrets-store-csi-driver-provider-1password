@@ -21,9 +21,9 @@ require (
 	github.com/google/go-cmp v0.6.0
 	github.com/prometheus/client_golang v1.19.1
 	go.opentelemetry.io/otel/exporters/prometheus v0.44.0
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240826202546-f6391c0de4c7
-	google.golang.org/grpc v1.65.0
-	google.golang.org/protobuf v1.35.1
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20241202173237-19429a94021a
+	google.golang.org/grpc v1.70.0
+	google.golang.org/protobuf v1.35.2
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/apimachinery v0.32.2
 	k8s.io/component-base v0.32.2
