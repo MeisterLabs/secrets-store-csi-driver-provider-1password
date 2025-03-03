@@ -23,7 +23,7 @@ require (
 	go.opentelemetry.io/otel/exporters/prometheus v0.44.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241202173237-19429a94021a
 	google.golang.org/grpc v1.70.0
-	google.golang.org/protobuf v1.36.1
+	google.golang.org/protobuf v1.36.5
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/apimachinery v0.32.2
 	k8s.io/component-base v0.32.2
