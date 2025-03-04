@@ -20,7 +20,7 @@ require (
 	github.com/1Password/connect-sdk-go v1.5.3
 	github.com/google/go-cmp v0.6.0
 	github.com/prometheus/client_golang v1.21.0
-	go.opentelemetry.io/otel/exporters/prometheus v0.44.0
+	go.opentelemetry.io/otel/exporters/prometheus v0.56.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241202173237-19429a94021a
 	google.golang.org/grpc v1.70.0
 	google.golang.org/protobuf v1.36.5
